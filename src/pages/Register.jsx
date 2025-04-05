@@ -83,6 +83,7 @@ function Register() {
 
       if (response.data.statusCode == 201) {
         navigate("/login");
+        alert("Đăng ký thành công");
       } else {
         setError(response.data.message || "Đăng ký thất bại");
       }

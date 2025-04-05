@@ -59,15 +59,15 @@ function Login() {
     try {
       const response = await axios.post("http://localhost:8080/api/login", {
         username: formData.email,
-        password: formData.password,
+        password: formData.password
       });
 
-      if (response.data.statusCode === 200) {
+      if (response.status === 200) {
         // Lưu thông tin người dùng vào localStorage
         localStorage.setItem(
           "user",
           JSON.stringify({
-            fullname: response.data.data.fullname,
+            fullname: response.data.fullname,
             email: formData.email,
           })
         );
