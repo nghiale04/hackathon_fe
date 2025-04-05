@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import {
@@ -30,7 +30,8 @@ const categories = [
     id: "family",
     title: "Gia đình",
     icon: Home,
-    description: "Đánh giá về các vấn đề liên quan đến gia đình và mối quan hệ trong nhà",
+    description:
+      "Đánh giá về các vấn đề liên quan đến gia đình và mối quan hệ trong nhà",
     color: "#FF6B6B",
   },
   {
@@ -120,7 +121,7 @@ function Assessment() {
   const [totalScore, setTotalScore] = useState(0);
   const [answerPoints, setAnswerPoints] = useState({});
   const [type, setType] = useState(null);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const fetchQuestions = async (categoryId) => {
     setIsLoading(true);
@@ -128,26 +129,26 @@ function Assessment() {
     try {
       const response = await axios.get(`http://localhost:8080/api/questions`, {
         params: {
-          type: categoryId
-        }
+          type: categoryId,
+        },
       });
-      
+
       // Transform the API response data structure
-      const transformedQuestions = response.data.map(item => ({
+      const transformedQuestions = response.data.map((item) => ({
         id: item.questions.questionId,
         question: item.questions.questionContent,
-        options: item.answers.map(answer => ({
+        options: item.answers.map((answer) => ({
           id: answer.answerId.toString(),
           text: answer.answerContent,
           emoji: getEmojiForAnswer(answer.answerPoint), // Helper function to assign emojis based on answer point
-          answerPoint: answer.answerPoint
-        }))
+          answerPoint: answer.answerPoint,
+        })),
       }));
 
       setQuestions(transformedQuestions);
-      console.log('Transformed questions:', transformedQuestions);
+      console.log("Transformed questions:", transformedQuestions);
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to fetch questions');
+      setError(err.response?.data?.message || "Failed to fetch questions");
     } finally {
       setIsLoading(false);
     }
@@ -160,7 +161,7 @@ function Assessment() {
       2: "🙂", // Đồng ý
       3: "😐", // Không chắc chắn
       4: "😕", // Không đồng ý
-      5: "😔"  // Rất không đồng ý
+      5: "😔", // Rất không đồng ý
     };
     return emojis[point] || "🤔";
   };
@@ -177,7 +178,7 @@ function Assessment() {
   const handleAnswer = (questionId, optionId, answerPoint) => {
     // Lưu điểm số của câu trả lời cũ (nếu có) để trừ đi
     const oldPoint = answerPoints[questionId] || 0;
-    
+
     // Cập nhật answers như cũ
     setAnswers({
       ...answers,
@@ -187,11 +188,11 @@ function Assessment() {
     // Cập nhật điểm số cho câu hỏi hiện tại
     setAnswerPoints({
       ...answerPoints,
-      [questionId]: answerPoint
+      [questionId]: answerPoint,
     });
 
     // Cập nhật tổng điểm: trừ điểm cũ (nếu có) và cộng điểm mới
-    setTotalScore(prevScore => prevScore - oldPoint + answerPoint);
+    setTotalScore((prevScore) => prevScore - oldPoint + answerPoint);
   };
 
   const handleNext = () => {
@@ -201,14 +202,15 @@ function Assessment() {
       setShowResults(true);
       // Extract only serializable properties from selectedCategory
       const { id, title, description, color } = selectedCategory;
-      navigate('/result', { // Navigate to AssessmentResult page
+      navigate("/result", {
+        // Navigate to AssessmentResult page
         state: {
           answers,
           category: { id, title, description, color }, // Pass only serializable data
           questions,
           totalScore,
-          type
-        }
+          type,
+        },
       });
     }
   };
@@ -268,7 +270,10 @@ function Assessment() {
             ) : error ? (
               <div className="error">
                 <p>{error}</p>
-                <button className="action-button primary" onClick={() => fetchQuestions(selectedCategory.id)}>
+                <button
+                  className="action-button primary"
+                  onClick={() => fetchQuestions(selectedCategory.id)}
+                >
                   Thử lại
                 </button>
               </div>
@@ -284,7 +289,6 @@ function Assessment() {
                   <div className="progress-text">
                     Câu hỏi {currentQuestion + 1} trên {questions.length}
                   </div>
-                  
                 </div>
 
                 <div className="question-container">
@@ -319,9 +323,8 @@ function Assessment() {
                       >
                         <div className="option-emoji">{option.emoji}</div>
                         <div className="option-text">{option.text}</div>
-                        {answers[questions[currentQuestion].id] === option.id && (
-                          <CheckCircle className="check-icon" />
-                        )}
+                        {answers[questions[currentQuestion].id] ===
+                          option.id && <CheckCircle className="check-icon" />}
                       </div>
                     ))}
                   </div>
@@ -338,7 +341,9 @@ function Assessment() {
                   <button
                     className="action-button primary"
                     onClick={handleNext}
-                    disabled={!isQuestionAnswered(questions[currentQuestion].id)}
+                    disabled={
+                      !isQuestionAnswered(questions[currentQuestion].id)
+                    }
                   >
                     {currentQuestion < questions.length - 1
                       ? "Tiếp theo"
@@ -352,22 +357,29 @@ function Assessment() {
             ) : (
               <div className="no-questions">
                 <p>Không tìm thấy câu hỏi cho lĩnh vực này</p>
-                <button className="action-button primary" onClick={() => setSelectedCategory(null)}>
+                <button
+                  className="action-button primary"
+                  onClick={() => setSelectedCategory(null)}
+                >
                   Chọn lĩnh vực khác
                 </button>
               </div>
             )}
           </>
         ) : (
-          <Link to="/result" element={<AssessmentResult
-            answers={answers}
-            category={selectedCategory}
-            questions={questions}
-            totalScore={totalScore}
-            type={type}
-            onReset={resetAssessment}
-          />} />
-          
+          <Link
+            to="/result"
+            element={
+              <AssessmentResult
+                answers={answers}
+                category={selectedCategory}
+                questions={questions}
+                totalScore={totalScore}
+                type={type}
+                onReset={resetAssessment}
+              />
+            }
+          />
         )}
       </div>
     </main>

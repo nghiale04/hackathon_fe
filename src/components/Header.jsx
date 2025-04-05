@@ -34,7 +34,7 @@ function Header() {
       <div className="header-left">
         <Link to="/" className="logo">
           <Home className="logo-icon" />
-          <span>T-ONE</span>
+          <span>SoulMate AI </span>
         </Link>
       </div>
 
@@ -47,10 +47,7 @@ function Header() {
           <BookOpen className="nav-icon" />
           <span>Tài nguyên</span>
         </Link>
-        <Link to="/emergency" className="nav-link">
-          <LifeBuoy className="nav-icon" />
-          <span>Hỗ trợ</span>
-        </Link>
+     
       </nav>
 
       <div className="header-right">
@@ -58,11 +55,18 @@ function Header() {
           <div className="user-info">
             <div className="user-profile">
               <User className="user-icon" />
-              <span className="user-name" onClick={() => navigate('/assessment-history')}>
+              <span
+                className="user-name"
+                onClick={() => navigate("/assessment-history")}
+              >
                 {user.fullname}
               </span>
             </div>
-            <button onClick={handleLogout} className="logout-button" style={{ backgroundColor: '#666', opacity: 1 }}>
+            <button
+              onClick={handleLogout}
+              className="logout-button"
+              style={{ backgroundColor: "#666", opacity: 1 }}
+            >
               <LogOut className="logout-icon" />
               <span>Đăng xuất</span>
             </button>

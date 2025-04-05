@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../styles/assessmentHistory.css';
 import Header from '../components/Header';
+import Chatbot from '../components/Chatbot';
 
 function AssessmentHistory() {
   const [history, setHistory] = useState([]);
@@ -37,13 +38,14 @@ function AssessmentHistory() {
               <li key={result.resultId} className="result-card">
                 <div className="result-content">
                   <h3>Kết quả đánh giá lần {result.resultId}</h3>
-                  <p>{JSON.parse(result.resultContent).candidates[0].content.parts[0].text}</p>
+                  <p>{result.resultContent}</p>
                 </div>
               </li>
             ))}
           </ul>
         )}
       </div>
+      <Chatbot />
     </>
   );
 }
