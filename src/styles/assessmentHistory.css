@@ -1,0 +1,61 @@
+.assessment-history {
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 150px;
+
+}
+
+.assessment-history h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.assessment-history p {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.assessment-history ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.assessment-history li {
+  background-color: #fff;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.result-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.result-card {
+  background-color: #fff;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
+}
+
+.result-card:hover {
+  transform: translateY(-5px);
+}
+
+.result-content h3 {
+  margin: 0 0 10px 0;
+  font-size: 18px;
+}
+
+.result-content p {
+  margin: 0;
+  font-size: 16px;
+} 
