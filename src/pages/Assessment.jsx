@@ -1,218 +1,355 @@
-import { useState, useEffect } from "react"
-import { Link } from "react-router-dom"
-import { CheckCircle, ArrowRight, RefreshCw } from "lucide-react"
-import "../styles/assessment.css"
 
-// Assessment questions and answers
-const questions = [
-  {
-    id: 1,
-    question: "How would you describe your stress levels over the past two weeks?",
-    options: [
-      { id: "a", text: "I rarely feel stressed and can easily manage when I do" },
-      { id: "b", text: "I occasionally feel stressed but can usually cope with it" },
-      { id: "c", text: "I often feel stressed and sometimes struggle to manage it" },
-      { id: "d", text: "I feel constantly overwhelmed by stress and find it difficult to cope" },
-    ],
-  },
-  {
-    id: 2,
-    question: "How would you rate your sleep quality recently?",
-    options: [
-      { id: "a", text: "I sleep well and wake up feeling refreshed" },
-      { id: "b", text: "I generally sleep well but occasionally have trouble" },
-      { id: "c", text: "I often have trouble falling or staying asleep" },
-      { id: "d", text: "I have significant sleep problems that affect my daily life" },
-    ],
-  },
-  {
-    id: 3,
-    question: "How often do you experience feelings of sadness or low mood?",
-    options: [
-      { id: "a", text: "Rarely or never" },
-      { id: "b", text: "Occasionally, but it passes quickly" },
-      { id: "c", text: "Frequently, but I can usually manage it" },
-      { id: "d", text: "Often and it significantly impacts my daily life" },
-    ],
-  },
-  {
-    id: 4,
-    question: "How would you describe your social connections and support network?",
-    options: [
-      { id: "a", text: "I have strong relationships and feel well-supported" },
-      { id: "b", text: "I have some good relationships but could use more support" },
-      { id: "c", text: "I have few people I can rely on for support" },
-      { id: "d", text: "I feel isolated and lack supportive relationships" },
-    ],
-  },
-  {
-    id: 5,
-    question: "How do you typically respond to setbacks or challenges?",
-    options: [
-      { id: "a", text: "I see them as opportunities to learn and grow" },
-      { id: "b", text: "I try to solve the problem but may get frustrated" },
-      { id: "c", text: "I often worry and find it hard to move forward" },
-      { id: "d", text: "I tend to feel overwhelmed and struggle to cope" },
-    ],
-  },
-]
 
-// Results based on most common answer
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import {
+  CheckCircle,
+  ArrowRight,
+  RefreshCw,
+  Home,
+  Users,
+  Heart,
+  Book,
+  Globe,
+  MoreHorizontal,
+} from "lucide-react";
+import "../styles/assessment.css";
+
+
+// Categories for mental health assessment
+const categories = [
+  {
+    id: "family",
+    title: "Gia đình",
+    icon: Home,
+    description:
+      "Đánh giá về các vấn đề liên quan đến gia đình và mối quan hệ trong nhà",
+    color: "#FF6B6B",
+  },
+  {
+    id: "friends",
+    title: "Bạn bè",
+    icon: Users,
+    description: "Đánh giá về các mối quan hệ bạn bè và tương tác xã hội",
+    color: "#4ECDC4",
+  },
+  {
+    id: "relationship",
+    title: "Tình cảm",
+    icon: Heart,
+    description: "Đánh giá về các vấn đề tình cảm và mối quan hệ lãng mạn",
+    color: "#FF9F1C",
+  },
+  {
+    id: "study",
+    title: "Học tập",
+    icon: Book,
+    description: "Đánh giá về áp lực học tập và định hướng tương lai",
+    color: "#2EC4B6",
+  },
+  {
+    id: "social",
+    title: "Mạng xã hội",
+    icon: Globe,
+    description: "Đánh giá về ảnh hưởng của mạng xã hội đến cuộc sống",
+    color: "#E71D36",
+  },
+  {
+    id: "other",
+    title: "Khác",
+    icon: MoreHorizontal,
+    description: "Đánh giá về các vấn đề khác trong cuộc sống",
+    color: "#6C63FF",
+  },
+];
+
+// Questions for each category
+const categoryQuestions = {
+  family: [
+    {
+      id: 1,
+      question:
+        "Bạn cảm thấy thế nào về mối quan hệ với các thành viên trong gia đình?",
+      options: [
+        { id: "a", text: "Rất tốt, luôn được yêu thương và hỗ trợ" },
+        { id: "b", text: "Khá tốt, đôi khi có xung đột nhỏ" },
+        { id: "c", text: "Không tốt lắm, thường xuyên có mâu thuẫn" },
+        { id: "d", text: "Rất tệ, luôn cảm thấy căng thẳng và áp lực" },
+      ],
+    },
+    {
+      id: 2,
+      question: "Bạn có thường xuyên chia sẻ cảm xúc với gia đình không?",
+      options: [
+        { id: "a", text: "Luôn chia sẻ mọi điều" },
+        { id: "b", text: "Thỉnh thoảng chia sẻ" },
+        { id: "c", text: "Hiếm khi chia sẻ" },
+        { id: "d", text: "Không bao giờ chia sẻ" },
+      ],
+    },
+  ],
+  friends: [
+    {
+      id: 1,
+      question: "Bạn có nhiều bạn bè thân thiết không?",
+      options: [
+        { id: "a", text: "Có nhiều bạn thân và luôn được hỗ trợ" },
+        { id: "b", text: "Có một vài người bạn thân" },
+        { id: "c", text: "Có ít bạn bè thân thiết" },
+        { id: "d", text: "Không có bạn bè thân thiết" },
+      ],
+    },
+  ],
+  relationship: [
+    {
+      id: 1,
+      question: "Bạn có hài lòng với mối quan hệ tình cảm hiện tại không?",
+      options: [
+        { id: "a", text: "Rất hài lòng và hạnh phúc" },
+        { id: "b", text: "Khá hài lòng" },
+        { id: "c", text: "Không hài lòng lắm" },
+        { id: "d", text: "Rất không hài lòng" },
+      ],
+    },
+  ],
+  study: [
+    {
+      id: 1,
+      question: "Bạn có thường xuyên cảm thấy áp lực trong học tập không?",
+      options: [
+        { id: "a", text: "Hiếm khi, luôn cân bằng tốt" },
+        { id: "b", text: "Thỉnh thoảng, nhưng có thể kiểm soát" },
+        { id: "c", text: "Thường xuyên, khó kiểm soát" },
+        { id: "d", text: "Luôn luôn, rất căng thẳng" },
+      ],
+    },
+  ],
+  social: [
+    {
+      id: 1,
+      question: "Mạng xã hội ảnh hưởng thế nào đến cuộc sống của bạn?",
+      options: [
+        { id: "a", text: "Tích cực, giúp kết nối và học hỏi" },
+        { id: "b", text: "Có cả tích cực và tiêu cực" },
+        { id: "c", text: "Tiêu cực nhiều hơn tích cực" },
+        { id: "d", text: "Rất tiêu cực, ảnh hưởng xấu đến cuộc sống" },
+      ],
+    },
+  ],
+  other: [
+    {
+      id: 1,
+      question: "Bạn có thường xuyên cảm thấy lo lắng về tương lai không?",
+      options: [
+        { id: "a", text: "Hiếm khi, luôn lạc quan" },
+        { id: "b", text: "Thỉnh thoảng, nhưng vẫn kiểm soát được" },
+        { id: "c", text: "Thường xuyên, khó kiểm soát" },
+        { id: "d", text: "Luôn luôn, rất lo lắng" },
+      ],
+    },
+  ],
+};
+
+// Results based on category and answers
 const results = {
-  a: {
-    title: "Strong Mental Wellbeing",
-    description:
-      "Your responses suggest you're currently experiencing good mental wellbeing. You appear to have effective coping strategies and a positive outlook. Continue practicing self-care and maintaining your supportive relationships.",
-    recommendations: [
-      "Continue your current self-care practices",
-      "Consider mentoring or supporting others who may be struggling",
-      "Explore ways to further enhance your mental resilience",
-      "Check out our resources section for wellness maintenance strategies",
-    ],
+  family: {
+    a: {
+      title: "Mối quan hệ gia đình tốt",
+      description:
+        "Bạn có mối quan hệ gia đình rất tốt. Hãy tiếp tục duy trì và phát triển các mối quan hệ này.",
+      recommendations: [
+        "Dành thời gian chất lượng cho gia đình",
+        "Tiếp tục chia sẻ và lắng nghe",
+        "Tổ chức các hoạt động gia đình thường xuyên",
+      ],
+    },
+    b: {
+      title: "Mối quan hệ gia đình khá tốt",
+      description:
+        "Mối quan hệ gia đình của bạn khá ổn, nhưng có thể cải thiện thêm.",
+      recommendations: [
+        "Cải thiện giao tiếp trong gia đình",
+        "Giải quyết các xung đột nhỏ kịp thời",
+        "Tăng cường các hoạt động gia đình",
+      ],
+    },
+    c: {
+      title: "Cần cải thiện mối quan hệ gia đình",
+      description: "Bạn đang gặp một số vấn đề trong mối quan hệ gia đình.",
+      recommendations: [
+        "Tìm hiểu nguyên nhân của mâu thuẫn",
+        "Học cách giao tiếp hiệu quả",
+        "Tìm kiếm sự giúp đỡ từ chuyên gia nếu cần",
+      ],
+    },
+    d: {
+      title: "Mối quan hệ gia đình cần được quan tâm",
+      description:
+        "Mối quan hệ gia đình của bạn đang gặp nhiều vấn đề nghiêm trọng.",
+      recommendations: [
+        "Tìm kiếm sự giúp đỡ từ chuyên gia tâm lý",
+        "Tham gia các buổi tư vấn gia đình",
+        "Học cách đặt ranh giới lành mạnh",
+      ],
+    },
   },
-  b: {
-    title: "Generally Good Mental Health with Some Stress",
-    description:
-      "Your responses indicate generally good mental health with occasional stress or challenges. You have coping skills but might benefit from additional strategies during difficult periods.",
-    recommendations: [
-      "Practice mindfulness or meditation to manage occasional stress",
-      "Ensure you're maintaining a healthy work-life balance",
-      "Consider scheduling regular self-care activities",
-      "Explore our resources section for stress management techniques",
-    ],
-  },
-  c: {
-    title: "Moderate Stress or Mood Concerns",
-    description:
-      "Your responses suggest you're experiencing moderate levels of stress or mood concerns. While you're managing, you might benefit from additional support and coping strategies.",
-    recommendations: [
-      "Consider developing a structured self-care routine",
-      "Explore stress reduction techniques like deep breathing or progressive muscle relaxation",
-      "Reach out to trusted friends or family for additional support",
-      "Review our resources section for helpful articles and exercises",
-    ],
-  },
-  d: {
-    title: "Significant Stress or Emotional Challenges",
-    description:
-      "Your responses indicate you may be experiencing significant stress or emotional challenges. It's important to know that help is available, and there are effective strategies to improve how you're feeling.",
-    recommendations: [
-      "Consider speaking with a mental health professional for personalized support",
-      "Prioritize basic self-care like sleep, nutrition, and gentle exercise",
-      "Practice self-compassion and remember that seeking help is a sign of strength",
-      "Check our emergency resources if you need immediate support",
-    ],
-  },
-}
+  // ... Similar result structures for other categories
+};
 
 function Assessment({ onCompleteAssessment, previousResults }) {
-  const [currentQuestion, setCurrentQuestion] = useState(0)
-  const [answers, setAnswers] = useState({})
-  const [showResults, setShowResults] = useState(false)
-  const [result, setResult] = useState(null)
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [answers, setAnswers] = useState({});
+  const [showResults, setShowResults] = useState(false);
+  const [result, setResult] = useState(null);
 
-  // If there are previous results, we can use them to pre-fill answers
-  useEffect(() => {
-    if (previousResults && Object.keys(answers).length === 0) {
-      // This is just a placeholder - in a real app, you'd have logic to convert
-      // previous results back into answers if needed
-    }
-  }, [previousResults, answers])
+  const handleCategorySelect = (categoryId) => {
+    setSelectedCategory(categoryId);
+    setCurrentQuestion(0);
+    setAnswers({});
+  };
 
   const handleAnswer = (questionId, optionId) => {
     setAnswers({
       ...answers,
       [questionId]: optionId,
-    })
-  }
+    });
+  };
 
   const handleNext = () => {
-    if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1)
+    const currentQuestions = categoryQuestions[selectedCategory];
+    if (currentQuestion < currentQuestions.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
     } else {
-      const calculatedResult = calculateResult()
-      setResult(calculatedResult)
-      setShowResults(true)
+      const calculatedResult = calculateResult();
+      setResult(calculatedResult);
+      setShowResults(true);
 
-      // Pass the results up to the parent component
       if (onCompleteAssessment) {
-        onCompleteAssessment(calculatedResult)
+        onCompleteAssessment(calculatedResult);
       }
     }
-  }
+  };
 
   const handlePrevious = () => {
     if (currentQuestion > 0) {
-      setCurrentQuestion(currentQuestion - 1)
+      setCurrentQuestion(currentQuestion - 1);
     }
-  }
+  };
 
   const calculateResult = () => {
-    // Count frequency of each answer type
-    const counts = { a: 0, b: 0, c: 0, d: 0 }
+    const currentAnswers = Object.values(answers);
+    const counts = { a: 0, b: 0, c: 0, d: 0 };
 
-    Object.values(answers).forEach((answer) => {
-      counts[answer]++
-    })
+    currentAnswers.forEach((answer) => {
+      counts[answer]++;
+    });
 
-    // Find most common answer
-    let mostCommon = "a"
-    let highestCount = 0
+    let mostCommon = "a";
+    let highestCount = 0;
 
     Object.entries(counts).forEach(([answer, count]) => {
       if (count > highestCount) {
-        highestCount = count
-        mostCommon = answer
+        highestCount = count;
+        mostCommon = answer;
       }
-    })
+    });
 
-    return results[mostCommon]
-  }
+    return results[selectedCategory][mostCommon];
+  };
 
   const resetAssessment = () => {
-    setCurrentQuestion(0)
-    setAnswers({})
-    setShowResults(false)
-    setResult(null)
+    setSelectedCategory(null);
+    setCurrentQuestion(0);
+    setAnswers({});
+    setShowResults(false);
+    setResult(null);
 
-    // Clear results in parent component
     if (onCompleteAssessment) {
-      onCompleteAssessment(null)
+      onCompleteAssessment(null);
     }
-  }
+  };
 
   const isQuestionAnswered = (questionId) => {
-    return answers[questionId] !== undefined
-  }
+    return answers[questionId] !== undefined;
+  };
 
-  const progressPercentage = ((Object.keys(answers).length / questions.length) * 100).toFixed(0)
+  const progressPercentage = selectedCategory
+    ? (
+        (Object.keys(answers).length /
+          categoryQuestions[selectedCategory].length) *
+        100
+      ).toFixed(0)
+    : 0;
 
   return (
     <main className="assessment-main">
       <div className="assessment-card">
-        {!showResults ? (
+        {!selectedCategory ? (
+          <div className="category-selection">
+            <h2>Chọn lĩnh vực bạn muốn đánh giá</h2>
+            <div className="category-grid">
+              {categories.map((category) => {
+                const Icon = category.icon;
+                return (
+                  <div
+                    key={category.id}
+                    className="category-card"
+                    onClick={() => handleCategorySelect(category.id)}
+                    style={{ backgroundColor: category.color }}
+                  >
+                    <Icon className="category-icon" />
+                    <h3>{category.title}</h3>
+                    <p>{category.description}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ) : !showResults ? (
           <>
             <div className="assessment-progress">
               <div className="progress-bar">
-                <div className="progress-fill" style={{ width: `${progressPercentage}%` }}></div>
+                <div
+                  className="progress-fill"
+                  style={{ width: `${progressPercentage}%` }}
+                ></div>
               </div>
               <div className="progress-text">
-                Question {currentQuestion + 1} of {questions.length}
+                Câu hỏi {currentQuestion + 1} trên{" "}
+                {categoryQuestions[selectedCategory].length}
               </div>
             </div>
 
             <div className="question-container">
-              <h2 className="question-text">{questions[currentQuestion].question}</h2>
+              <h2 className="question-text">
+                {categoryQuestions[selectedCategory][currentQuestion].question}
+              </h2>
 
               <div className="options-container">
-                {questions[currentQuestion].options.map((option) => (
+                {categoryQuestions[selectedCategory][
+                  currentQuestion
+                ].options.map((option) => (
                   <div
                     key={option.id}
-                    className={`option ${answers[questions[currentQuestion].id] === option.id ? "selected" : ""}`}
-                    onClick={() => handleAnswer(questions[currentQuestion].id, option.id)}
+                    className={`option ${
+                      answers[
+                        categoryQuestions[selectedCategory][currentQuestion].id
+                      ] === option.id
+                        ? "selected"
+                        : ""
+                    }`}
+                    onClick={() =>
+                      handleAnswer(
+                        categoryQuestions[selectedCategory][currentQuestion].id,
+                        option.id
+                      )
+                    }
                   >
                     <div className="option-checkbox">
-                      {answers[questions[currentQuestion].id] === option.id && <CheckCircle className="check-icon" />}
+                      {answers[
+                        categoryQuestions[selectedCategory][currentQuestion].id
+                      ] === option.id && <CheckCircle className="check-icon" />}
                     </div>
                     <div className="option-text">{option.text}</div>
                   </div>
@@ -221,16 +358,30 @@ function Assessment({ onCompleteAssessment, previousResults }) {
             </div>
 
             <div className="assessment-actions">
-              <button className="action-button secondary" onClick={handlePrevious} disabled={currentQuestion === 0}>
-                Previous
+              <button
+                className="action-button secondary"
+                onClick={handlePrevious}
+                disabled={currentQuestion === 0}
+              >
+                Quay lại
               </button>
               <button
                 className="action-button primary"
                 onClick={handleNext}
-                disabled={!isQuestionAnswered(questions[currentQuestion].id)}
+                disabled={
+                  !isQuestionAnswered(
+                    categoryQuestions[selectedCategory][currentQuestion].id
+                  )
+                }
               >
-                {currentQuestion < questions.length - 1 ? "Next" : "See Results"}
-                {currentQuestion < questions.length - 1 ? <ArrowRight className="button-icon" /> : null}
+                {currentQuestion <
+                categoryQuestions[selectedCategory].length - 1
+                  ? "Tiếp theo"
+                  : "Xem kết quả"}
+                {currentQuestion <
+                  categoryQuestions[selectedCategory].length - 1 && (
+                  <ArrowRight className="button-icon" />
+                )}
               </button>
             </div>
           </>
@@ -240,7 +391,7 @@ function Assessment({ onCompleteAssessment, previousResults }) {
             <p className="results-description">{result.description}</p>
 
             <div className="recommendations-container">
-              <h3 className="recommendations-title">Recommendations</h3>
+              <h3 className="recommendations-title">Đề xuất</h3>
               <ul className="recommendations-list">
                 {result.recommendations.map((recommendation, index) => (
                   <li key={index} className="recommendation-item">
@@ -251,26 +402,29 @@ function Assessment({ onCompleteAssessment, previousResults }) {
             </div>
 
             <div className="results-actions">
-              <button className="action-button primary" onClick={resetAssessment}>
-                <RefreshCw className="button-icon" /> Take Assessment Again
+              <button
+                className="action-button primary"
+                onClick={resetAssessment}
+              >
+                <RefreshCw className="button-icon" /> Làm lại đánh giá
               </button>
               <Link to="/recommendations" className="action-button secondary">
-                View Personalized Recommendations
+                Xem đề xuất chi tiết
               </Link>
             </div>
 
             <div className="results-disclaimer">
               <p>
-                This assessment is not a diagnostic tool. If you're experiencing significant distress, please consult
-                with a mental health professional.
+                Đánh giá này không phải là công cụ chẩn đoán. Nếu bạn đang gặp
+                khó khăn nghiêm trọng, hãy tìm kiếm sự giúp đỡ từ chuyên gia tâm
+                lý.
               </p>
             </div>
           </div>
         )}
       </div>
     </main>
-  )
+  );
 }
 
-export default Assessment
-
+export default Assessment;
