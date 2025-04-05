@@ -1,7 +1,6 @@
-
-
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 import {
   CheckCircle,
   ArrowRight,
@@ -12,33 +11,33 @@ import {
   Book,
   Globe,
   MoreHorizontal,
+  ChevronLeft,
 } from "lucide-react";
+import AssessmentResult from "../components/AssessmentResult";
 import "../styles/assessment.css";
-
 
 // Categories for mental health assessment
 const categories = [
   {
+    id: "love",
+    title: "Tình yêu",
+    icon: Heart,
+    description: "Đánh giá về các vấn đề tình cảm và mối quan hệ lãng mạn",
+    color: "#FF9F1C",
+  },
+  {
     id: "family",
     title: "Gia đình",
     icon: Home,
-    description:
-      "Đánh giá về các vấn đề liên quan đến gia đình và mối quan hệ trong nhà",
+    description: "Đánh giá về các vấn đề liên quan đến gia đình và mối quan hệ trong nhà",
     color: "#FF6B6B",
   },
   {
-    id: "friends",
+    id: "friend",
     title: "Bạn bè",
     icon: Users,
     description: "Đánh giá về các mối quan hệ bạn bè và tương tác xã hội",
     color: "#4ECDC4",
-  },
-  {
-    id: "relationship",
-    title: "Tình cảm",
-    icon: Heart,
-    description: "Đánh giá về các vấn đề tình cảm và mối quan hệ lãng mạn",
-    color: "#FF9F1C",
   },
   {
     id: "study",
@@ -62,93 +61,6 @@ const categories = [
     color: "#6C63FF",
   },
 ];
-
-// Questions for each category
-const categoryQuestions = {
-  family: [
-    {
-      id: 1,
-      question:
-        "Bạn cảm thấy thế nào về mối quan hệ với các thành viên trong gia đình?",
-      options: [
-        { id: "a", text: "Rất tốt, luôn được yêu thương và hỗ trợ" },
-        { id: "b", text: "Khá tốt, đôi khi có xung đột nhỏ" },
-        { id: "c", text: "Không tốt lắm, thường xuyên có mâu thuẫn" },
-        { id: "d", text: "Rất tệ, luôn cảm thấy căng thẳng và áp lực" },
-      ],
-    },
-    {
-      id: 2,
-      question: "Bạn có thường xuyên chia sẻ cảm xúc với gia đình không?",
-      options: [
-        { id: "a", text: "Luôn chia sẻ mọi điều" },
-        { id: "b", text: "Thỉnh thoảng chia sẻ" },
-        { id: "c", text: "Hiếm khi chia sẻ" },
-        { id: "d", text: "Không bao giờ chia sẻ" },
-      ],
-    },
-  ],
-  friends: [
-    {
-      id: 1,
-      question: "Bạn có nhiều bạn bè thân thiết không?",
-      options: [
-        { id: "a", text: "Có nhiều bạn thân và luôn được hỗ trợ" },
-        { id: "b", text: "Có một vài người bạn thân" },
-        { id: "c", text: "Có ít bạn bè thân thiết" },
-        { id: "d", text: "Không có bạn bè thân thiết" },
-      ],
-    },
-  ],
-  relationship: [
-    {
-      id: 1,
-      question: "Bạn có hài lòng với mối quan hệ tình cảm hiện tại không?",
-      options: [
-        { id: "a", text: "Rất hài lòng và hạnh phúc" },
-        { id: "b", text: "Khá hài lòng" },
-        { id: "c", text: "Không hài lòng lắm" },
-        { id: "d", text: "Rất không hài lòng" },
-      ],
-    },
-  ],
-  study: [
-    {
-      id: 1,
-      question: "Bạn có thường xuyên cảm thấy áp lực trong học tập không?",
-      options: [
-        { id: "a", text: "Hiếm khi, luôn cân bằng tốt" },
-        { id: "b", text: "Thỉnh thoảng, nhưng có thể kiểm soát" },
-        { id: "c", text: "Thường xuyên, khó kiểm soát" },
-        { id: "d", text: "Luôn luôn, rất căng thẳng" },
-      ],
-    },
-  ],
-  social: [
-    {
-      id: 1,
-      question: "Mạng xã hội ảnh hưởng thế nào đến cuộc sống của bạn?",
-      options: [
-        { id: "a", text: "Tích cực, giúp kết nối và học hỏi" },
-        { id: "b", text: "Có cả tích cực và tiêu cực" },
-        { id: "c", text: "Tiêu cực nhiều hơn tích cực" },
-        { id: "d", text: "Rất tiêu cực, ảnh hưởng xấu đến cuộc sống" },
-      ],
-    },
-  ],
-  other: [
-    {
-      id: 1,
-      question: "Bạn có thường xuyên cảm thấy lo lắng về tương lai không?",
-      options: [
-        { id: "a", text: "Hiếm khi, luôn lạc quan" },
-        { id: "b", text: "Thỉnh thoảng, nhưng vẫn kiểm soát được" },
-        { id: "c", text: "Thường xuyên, khó kiểm soát" },
-        { id: "d", text: "Luôn luôn, rất lo lắng" },
-      ],
-    },
-  ],
-};
 
 // Results based on category and answers
 const results = {
@@ -196,38 +108,93 @@ const results = {
   // ... Similar result structures for other categories
 };
 
-function Assessment({ onCompleteAssessment, previousResults }) {
+function Assessment() {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState({});
   const [showResults, setShowResults] = useState(false);
-  const [result, setResult] = useState(null);
+  const [questions, setQuestions] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [totalScore, setTotalScore] = useState(0);
+  const [answerPoints, setAnswerPoints] = useState({});
 
-  const handleCategorySelect = (categoryId) => {
-    setSelectedCategory(categoryId);
-    setCurrentQuestion(0);
-    setAnswers({});
+  const fetchQuestions = async (categoryId) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const response = await axios.get(`http://localhost:8080/api/questions`, {
+        params: {
+          type: categoryId
+        }
+      });
+      
+      // Transform the API response data structure
+      const transformedQuestions = response.data.map(item => ({
+        id: item.questions.questionId,
+        question: item.questions.questionContent,
+        options: item.answers.map(answer => ({
+          id: answer.answerId.toString(),
+          text: answer.answerContent,
+          emoji: getEmojiForAnswer(answer.answerPoint), // Helper function to assign emojis based on answer point
+          answerPoint: answer.answerPoint
+        }))
+      }));
+
+      setQuestions(transformedQuestions);
+      console.log('Transformed questions:', transformedQuestions);
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to fetch questions');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleAnswer = (questionId, optionId) => {
+  // Helper function to assign emojis based on answer point
+  const getEmojiForAnswer = (point) => {
+    const emojis = {
+      1: "😊", // Rất đồng ý
+      2: "🙂", // Đồng ý
+      3: "😐", // Không chắc chắn
+      4: "😕", // Không đồng ý
+      5: "😔"  // Rất không đồng ý
+    };
+    return emojis[point] || "🤔";
+  };
+
+  const handleCategorySelect = (category) => {
+    setSelectedCategory(category);
+    setCurrentQuestion(0);
+    setAnswers({});
+    setShowResults(false);
+    fetchQuestions(category.id);
+  };
+
+  const handleAnswer = (questionId, optionId, answerPoint) => {
+    // Lưu điểm số của câu trả lời cũ (nếu có) để trừ đi
+    const oldPoint = answerPoints[questionId] || 0;
+    
+    // Cập nhật answers như cũ
     setAnswers({
       ...answers,
       [questionId]: optionId,
     });
+
+    // Cập nhật điểm số cho câu hỏi hiện tại
+    setAnswerPoints({
+      ...answerPoints,
+      [questionId]: answerPoint
+    });
+
+    // Cập nhật tổng điểm: trừ điểm cũ (nếu có) và cộng điểm mới
+    setTotalScore(prevScore => prevScore - oldPoint + answerPoint);
   };
 
   const handleNext = () => {
-    const currentQuestions = categoryQuestions[selectedCategory];
-    if (currentQuestion < currentQuestions.length - 1) {
+    if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
-      const calculatedResult = calculateResult();
-      setResult(calculatedResult);
       setShowResults(true);
-
-      if (onCompleteAssessment) {
-        onCompleteAssessment(calculatedResult);
-      }
     }
   };
 
@@ -237,49 +204,22 @@ function Assessment({ onCompleteAssessment, previousResults }) {
     }
   };
 
-  const calculateResult = () => {
-    const currentAnswers = Object.values(answers);
-    const counts = { a: 0, b: 0, c: 0, d: 0 };
-
-    currentAnswers.forEach((answer) => {
-      counts[answer]++;
-    });
-
-    let mostCommon = "a";
-    let highestCount = 0;
-
-    Object.entries(counts).forEach(([answer, count]) => {
-      if (count > highestCount) {
-        highestCount = count;
-        mostCommon = answer;
-      }
-    });
-
-    return results[selectedCategory][mostCommon];
-  };
-
   const resetAssessment = () => {
     setSelectedCategory(null);
     setCurrentQuestion(0);
     setAnswers({});
     setShowResults(false);
-    setResult(null);
-
-    if (onCompleteAssessment) {
-      onCompleteAssessment(null);
-    }
+    setQuestions([]);
+    setTotalScore(0);
+    setAnswerPoints({});
   };
 
   const isQuestionAnswered = (questionId) => {
     return answers[questionId] !== undefined;
   };
 
-  const progressPercentage = selectedCategory
-    ? (
-        (Object.keys(answers).length /
-          categoryQuestions[selectedCategory].length) *
-        100
-      ).toFixed(0)
+  const progressPercentage = questions.length
+    ? ((currentQuestion + 1) / questions.length) * 100
     : 0;
 
   return (
@@ -295,7 +235,7 @@ function Assessment({ onCompleteAssessment, previousResults }) {
                   <div
                     key={category.id}
                     className="category-card"
-                    onClick={() => handleCategorySelect(category.id)}
+                    onClick={() => handleCategorySelect(category)}
                     style={{ backgroundColor: category.color }}
                   >
                     <Icon className="category-icon" />
@@ -308,119 +248,110 @@ function Assessment({ onCompleteAssessment, previousResults }) {
           </div>
         ) : !showResults ? (
           <>
-            <div className="assessment-progress">
-              <div className="progress-bar">
-                <div
-                  className="progress-fill"
-                  style={{ width: `${progressPercentage}%` }}
-                ></div>
+            {isLoading ? (
+              <div className="loading">Đang tải câu hỏi...</div>
+            ) : error ? (
+              <div className="error">
+                <p>{error}</p>
+                <button className="action-button primary" onClick={() => fetchQuestions(selectedCategory.id)}>
+                  Thử lại
+                </button>
               </div>
-              <div className="progress-text">
-                Câu hỏi {currentQuestion + 1} trên{" "}
-                {categoryQuestions[selectedCategory].length}
-              </div>
-            </div>
-
-            <div className="question-container">
-              <h2 className="question-text">
-                {categoryQuestions[selectedCategory][currentQuestion].question}
-              </h2>
-
-              <div className="options-container">
-                {categoryQuestions[selectedCategory][
-                  currentQuestion
-                ].options.map((option) => (
-                  <div
-                    key={option.id}
-                    className={`option ${
-                      answers[
-                        categoryQuestions[selectedCategory][currentQuestion].id
-                      ] === option.id
-                        ? "selected"
-                        : ""
-                    }`}
-                    onClick={() =>
-                      handleAnswer(
-                        categoryQuestions[selectedCategory][currentQuestion].id,
-                        option.id
-                      )
-                    }
-                  >
-                    <div className="option-checkbox">
-                      {answers[
-                        categoryQuestions[selectedCategory][currentQuestion].id
-                      ] === option.id && <CheckCircle className="check-icon" />}
-                    </div>
-                    <div className="option-text">{option.text}</div>
+            ) : questions.length > 0 ? (
+              <>
+                <div className="assessment-progress">
+                  <div className="progress-bar">
+                    <div
+                      className="progress-fill"
+                      style={{ width: `${progressPercentage}%` }}
+                    ></div>
                   </div>
-                ))}
-              </div>
-            </div>
+                  <div className="progress-text">
+                    Câu hỏi {currentQuestion + 1} trên {questions.length}
+                  </div>
+                  
+                </div>
 
-            <div className="assessment-actions">
-              <button
-                className="action-button secondary"
-                onClick={handlePrevious}
-                disabled={currentQuestion === 0}
-              >
-                Quay lại
-              </button>
-              <button
-                className="action-button primary"
-                onClick={handleNext}
-                disabled={
-                  !isQuestionAnswered(
-                    categoryQuestions[selectedCategory][currentQuestion].id
-                  )
-                }
-              >
-                {currentQuestion <
-                categoryQuestions[selectedCategory].length - 1
-                  ? "Tiếp theo"
-                  : "Xem kết quả"}
-                {currentQuestion <
-                  categoryQuestions[selectedCategory].length - 1 && (
-                  <ArrowRight className="button-icon" />
-                )}
-              </button>
-            </div>
+                <div className="question-container">
+                  <button
+                    className="back-button"
+                    onClick={() => setSelectedCategory(null)}
+                  >
+                    <ChevronLeft className="back-icon" />
+                    Quay lại
+                  </button>
+
+                  <h2 className="question-text">
+                    {questions[currentQuestion].question}
+                  </h2>
+
+                  <div className="options-container">
+                    {questions[currentQuestion].options.map((option) => (
+                      <div
+                        key={option.id}
+                        className={`option ${
+                          answers[questions[currentQuestion].id] === option.id
+                            ? "selected"
+                            : ""
+                        }`}
+                        onClick={() =>
+                          handleAnswer(
+                            questions[currentQuestion].id,
+                            option.id,
+                            option.answerPoint
+                          )
+                        }
+                      >
+                        <div className="option-emoji">{option.emoji}</div>
+                        <div className="option-text">{option.text}</div>
+                        {answers[questions[currentQuestion].id] === option.id && (
+                          <CheckCircle className="check-icon" />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="assessment-actions">
+                  <button
+                    className="action-button secondary"
+                    onClick={handlePrevious}
+                    disabled={currentQuestion === 0}
+                  >
+                    Quay về câu trước
+                  </button>
+                  <button
+                    className="action-button primary"
+                    onClick={handleNext}
+                    disabled={!isQuestionAnswered(questions[currentQuestion].id)}
+                  >
+                    {currentQuestion < questions.length - 1
+                      ? "Tiếp theo"
+                      : "Xem kết quả"}
+                    {currentQuestion < questions.length - 1 && (
+                      <ArrowRight className="button-icon" />
+                    )}
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className="no-questions">
+                <p>Không tìm thấy câu hỏi cho lĩnh vực này</p>
+                <button className="action-button primary" onClick={() => setSelectedCategory(null)}>
+                  Chọn lĩnh vực khác
+                </button>
+              </div>
+            )}
           </>
         ) : (
-          <div className="results-container">
-            <h2 className="results-title">{result.title}</h2>
-            <p className="results-description">{result.description}</p>
-
-            <div className="recommendations-container">
-              <h3 className="recommendations-title">Đề xuất</h3>
-              <ul className="recommendations-list">
-                {result.recommendations.map((recommendation, index) => (
-                  <li key={index} className="recommendation-item">
-                    {recommendation}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="results-actions">
-              <button
-                className="action-button primary"
-                onClick={resetAssessment}
-              >
-                <RefreshCw className="button-icon" /> Làm lại đánh giá
-              </button>
-              <Link to="/recommendations" className="action-button secondary">
-                Xem đề xuất chi tiết
-              </Link>
-            </div>
-
-            <div className="results-disclaimer">
-              <p>
-                Đánh giá này không phải là công cụ chẩn đoán. Nếu bạn đang gặp
-                khó khăn nghiêm trọng, hãy tìm kiếm sự giúp đỡ từ chuyên gia tâm
-                lý.
-              </p>
-            </div>
-          </div>
+          <AssessmentResult
+            answers={answers}
+            category={selectedCategory}
+            questions={questions}
+            totalScore={totalScore}
+            answerPoints={answerPoints}
+            onReset={resetAssessment}
+          />
         )}
       </div>
     </main>

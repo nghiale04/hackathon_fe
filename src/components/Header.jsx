@@ -1,33 +1,85 @@
-import { Link } from "react-router-dom"
-import "../styles/header.css"
+import { Link, useNavigate } from "react-router-dom";
+import {
+  LogIn,
+  UserPlus,
+  Home,
+  MessageCircle,
+  BookOpen,
+  LifeBuoy,
+  LogOut,
+  User,
+} from "lucide-react";
+import { useEffect, useState } from "react";
+import "../styles/header.css";
 
-function Header({ activePage }) {
+function Header() {
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      setUser(JSON.parse(userData));
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    setUser(null);
+    navigate("/login");
+  };
+
   return (
     <header className="header">
-      <h1 className="logo">MindfulCompanion</h1>
+      <div className="header-left">
+        <Link to="/" className="logo">
+          <Home className="logo-icon" />
+          <span>T-ONE</span>
+        </Link>
+      </div>
+
       <nav className="nav">
-        <Link to="/" className={`nav-link ${activePage === "home" ? "active" : ""}`}>
-          Home
+        <Link to="/assessment" className="nav-link">
+          <MessageCircle className="nav-icon" />
+          <span>Đánh giá</span>
         </Link>
-        <Link to="/assessment" className={`nav-link ${activePage === "assessment" ? "active" : ""}`}>
-          Assessment
+        <Link to="/resources" className="nav-link">
+          <BookOpen className="nav-icon" />
+          <span>Tài nguyên</span>
         </Link>
-        <Link to="/resources" className={`nav-link ${activePage === "resources" ? "active" : ""}`}>
-          Resources
-        </Link>
-        <Link to="/recommendations" className={`nav-link ${activePage === "recommendations" ? "active" : ""}`}>
-          Recommendations
-        </Link>
-        <Link to="/emergency" className={`nav-link ${activePage === "emergency" ? "active" : ""}`}>
-          Emergency
+        <Link to="/emergency" className="nav-link">
+          <LifeBuoy className="nav-icon" />
+          <span>Hỗ trợ</span>
         </Link>
       </nav>
-      <Link to="/emergency" className="help-button">
-        Get Help Now
-      </Link>
+
+      <div className="header-right">
+        {user ? (
+          <div className="user-info">
+            <div className="user-profile">
+              <User className="user-icon" />
+              <span className="user-name">{user.fullname}</span>
+            </div>
+            <button onClick={handleLogout} className="logout-button">
+              <LogOut className="logout-icon" />
+              <span>Đăng xuất</span>
+            </button>
+          </div>
+        ) : (
+          <>
+            <Link to="/login" className="auth-button login">
+              <LogIn className="auth-icon" />
+              <span>Đăng nhập</span>
+            </Link>
+            <Link to="/register" className="auth-button register">
+              <UserPlus className="auth-icon" />
+              <span>Đăng ký</span>
+            </Link>
+          </>
+        )}
+      </div>
     </header>
-  )
+  );
 }
 
-export default Header
-
+export default Header;
