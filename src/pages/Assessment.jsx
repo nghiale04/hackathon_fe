@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
-import { CheckCircle, ArrowRight, RefreshCw } from "react-icons/lu"
+import { CheckCircle, ArrowRight, RefreshCw } from "lucide-react"
 import "../styles/assessment.css"
 
 // Assessment questions and answers

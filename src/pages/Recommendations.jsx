@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Image, Video, MapPin, Filter } from "react-icons/lu"
+import { Image, Video, MapPin, Filter } from "lucide-react"
 import "../styles/recommendations.css"
 
 // Mock recommendation data

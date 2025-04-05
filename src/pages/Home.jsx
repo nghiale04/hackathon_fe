@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { MessageCircle, BookOpen, LifeBuoy } from "react-icons/lu"
+import { MessageCircle, BookOpen, LifeBuoy, BarChart3 } from "lucide-react"
 import FeatureCard from "../components/FeartureCard"
 import "../styles/home.css"
 
