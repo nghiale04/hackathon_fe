@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; 
 import { Link } from "react-router-dom";
 import axios from "axios";
 import {
@@ -118,6 +119,8 @@ function Assessment() {
   const [error, setError] = useState(null);
   const [totalScore, setTotalScore] = useState(0);
   const [answerPoints, setAnswerPoints] = useState({});
+  const [type, setType] = useState(null);
+  const navigate = useNavigate(); 
 
   const fetchQuestions = async (categoryId) => {
     setIsLoading(true);
@@ -168,6 +171,7 @@ function Assessment() {
     setAnswers({});
     setShowResults(false);
     fetchQuestions(category.id);
+    setType(category.id);
   };
 
   const handleAnswer = (questionId, optionId, answerPoint) => {
@@ -195,6 +199,17 @@ function Assessment() {
       setCurrentQuestion(currentQuestion + 1);
     } else {
       setShowResults(true);
+      // Extract only serializable properties from selectedCategory
+      const { id, title, description, color } = selectedCategory;
+      navigate('/result', { // Navigate to AssessmentResult page
+        state: {
+          answers,
+          category: { id, title, description, color }, // Pass only serializable data
+          questions,
+          totalScore,
+          type
+        }
+      });
     }
   };
 
@@ -344,14 +359,15 @@ function Assessment() {
             )}
           </>
         ) : (
-          <AssessmentResult
+          <Link to="/result" element={<AssessmentResult
             answers={answers}
             category={selectedCategory}
             questions={questions}
             totalScore={totalScore}
-            answerPoints={answerPoints}
+            type={type}
             onReset={resetAssessment}
-          />
+          />} />
+          
         )}
       </div>
     </main>

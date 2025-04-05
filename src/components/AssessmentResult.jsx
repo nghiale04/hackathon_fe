@@ -1,128 +1,119 @@
 import { useState, useEffect } from "react";
-import { CheckCircle, RefreshCw, ArrowRight } from "lucide-react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { RefreshCw } from "lucide-react";
 import "../styles/assessment.css";
+import axios from 'axios';
+import Header from "./Header";
 
-const AssessmentResult = ({ answers, category, onReset, totalScore }) => {
+const AssessmentResult = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // Lấy dữ liệu truyền từ trang trước
+  const { answers, category, questions, totalScore, type } = location.state || {};
+
   const [analysis, setAnalysis] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  
+  // Gửi dữ liệu khi component mount
   useEffect(() => {
-    const analyzeResults = async () => {
+    if (!type || totalScore === undefined) {
+      setError("Thiếu dữ liệu đánh giá. Vui lòng quay lại và thử lại.");
+      setLoading(false);
+      return;
+    }
+    const user = localStorage.getItem('user')
+    const username = JSON.parse(user).email;
+    const sendData = async () => {
       try {
-        // Format answers as JSON
-        const formattedAnswers = {
-          category: category.id,
-          timestamp: new Date().toISOString(),
-          answers: answers,
-        };
-
-        // TODO: Replace with actual AI API call
-        // This is a mock implementation
-        const response = await mockAIAnalysis(formattedAnswers);
-        setAnalysis(response);
-        console.log(answers);
+        const response = await axios.post('http://localhost:8080/api/qna/ask', {
+          username,
+          type,
+          totalScore
+        });
+        const analysis = response.data.candidates[0].content.parts[0].text;
+        
+        setAnalysis(analysis);
+        setLoading(false);
       } catch (err) {
-        setError("Có lỗi xảy ra khi phân tích kết quả. Vui lòng thử lại.");
-        console.error("Analysis error:", err);
-      } finally {
+        console.error('Error sending data:', err);
+        setError("Có lỗi xảy ra khi gửi dữ liệu. Vui lòng thử lại.");
         setLoading(false);
       }
     };
 
-    analyzeResults();
-  }, [answers, category]);
+    sendData();
+  }, [type, totalScore]);
 
-  const mockAIAnalysis = async (data) => {
-    // Simulate API call delay
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
-    // Mock analysis results
-    return {
-      summary:
-        "Dựa trên câu trả lời của bạn, chúng tôi nhận thấy bạn đang gặp một số vấn đề về sức khỏe tâm lý. Tuy nhiên, đây là tình trạng có thể cải thiện được.",
-      recommendations: [
-        "Thực hành các bài tập thở và thiền định hàng ngày",
-        "Duy trì lối sống lành mạnh và tập thể dục thường xuyên",
-        "Tìm kiếm sự hỗ trợ từ người thân và bạn bè",
-        "Xem xét việc tham khảo ý kiến chuyên gia tâm lý",
-      ],
-      severity: "moderate",
-      nextSteps: [
-        "Đặt lịch hẹn với chuyên gia tâm lý",
-        "Tham gia các hoạt động cộng đồng",
-        "Theo dõi tình trạng sức khỏe tâm lý hàng tuần",
-      ],
-    };
+  const handleReset = () => {
+    navigate(-1); // Quay lại trang trước để làm lại
   };
 
   if (loading) {
     return (
-      <div className="results-container">
+      <>
+      <Header />
+      <div className="results-container" style={{
+      paddingTop: '120px'
+    }}>
         <div className="loading-container">
           <div className="loading-spinner"></div>
           <p>Đang phân tích kết quả...</p>
         </div>
       </div>
+      </>
     );
   }
 
   if (error) {
     return (
-      <div className="results-container">
+      <>
+      <Header />
+      <div className="results-container" style={{
+      paddingTop: '120px'
+    }}>
         <div className="error-message">
           <p>{error}</p>
-          <button className="action-button primary" onClick={onReset}>
+          <button className="action-button primary" onClick={handleReset}>
             <RefreshCw className="button-icon" />
             Thử lại
           </button>
         </div>
       </div>
+      </>
     );
   }
 
+  const lines = analysis.split('\n');
+
+
   return (
-    <div className="results-container">
+    <>
+    <Header />
+    <div className="results-container" style={{
+      paddingTop: '120px'
+    }}>
       <h2 className="results-title">Kết quả đánh giá</h2>
-
+      
       <div className="results-content">
-        <div className="results-summary">
-          <h3>Tổng quan</h3>
-          <p>{analysis.summary}</p>
-        </div>
-
-        <div className="results-recommendations">
-          <h3>Đề xuất</h3>
-          <ul>
-            {analysis.recommendations.map((rec, index) => (
-              <li key={index}>
-                <CheckCircle className="check-icon" />
-                {rec}
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div className="results-next-steps">
-          <h3>Bước tiếp theo</h3>
-          <ul>
-            {analysis.nextSteps.map((step, index) => (
-              <li key={index}>
-                <ArrowRight className="arrow-icon" />
-                {step}
-              </li>
-            ))}
-          </ul>
-        </div>
+        <p><strong>Chủ đề:</strong> {category?.title}</p>
+        <p><strong>Tổng điểm:</strong> {totalScore}</p>
+        <p><strong>Loại đánh giá:</strong> {type}</p>
+        <p><strong>Phân tích AI:</strong> {lines.map((line, index) => (
+          <p key={index}>{line}</p>
+        )) || "Không có phân tích."}</p>
       </div>
 
       <div className="results-actions">
-        <button className="action-button primary" onClick={onReset}>
+        <button className="action-button primary" onClick={handleReset}>
           <RefreshCw className="button-icon" />
           Làm lại đánh giá
         </button>
       </div>
-    </div>
+      </div>
+      </>
   );
 };
 

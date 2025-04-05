@@ -12,6 +12,8 @@ import Recommendations from "./pages/Recommendations";
 import Emergency from "./pages/Emergency";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import AssessmentResult from "./components/AssessmentResult";
+import AssessmentHistory from "./pages/AssessmentHistory";
 
 function App() {
   // App-level state that could be passed as props
@@ -68,6 +70,8 @@ function App() {
           />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/result" element={<AssessmentResult />} />
+          <Route path="/assessment-history" element={<AssessmentHistory />} />
         </Routes>
       </div>
       

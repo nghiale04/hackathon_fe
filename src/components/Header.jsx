@@ -58,9 +58,11 @@ function Header() {
           <div className="user-info">
             <div className="user-profile">
               <User className="user-icon" />
-              <span className="user-name">{user.fullname}</span>
+              <span className="user-name" onClick={() => navigate('/assessment-history')}>
+                {user.fullname}
+              </span>
             </div>
-            <button onClick={handleLogout} className="logout-button">
+            <button onClick={handleLogout} className="logout-button" style={{ backgroundColor: '#666', opacity: 1 }}>
               <LogOut className="logout-icon" />
               <span>Đăng xuất</span>
             </button>
