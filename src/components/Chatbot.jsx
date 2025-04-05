@@ -1,14 +1,15 @@
-import { useState, useRef, useEffect } from 'react';
-import axios from 'axios';
-import { Send, X, Minimize2, Maximize2 } from 'lucide-react';
-import '../styles/chatbot.css';
+import { useState, useRef, useEffect } from "react";
+import axios from "axios";
+import { Send, X, Minimize2, Maximize2 } from "lucide-react";
+import "../styles/chatbot.css";
 
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [messages, setMessages] = useState([]);
-  const [inputMessage, setInputMessage] = useState('');
+  const [inputMessage, setInputMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [isFirstOpen, setIsFirstOpen] = useState(true);
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -23,6 +24,16 @@ const Chatbot = () => {
     setIsOpen(!isOpen);
     if (!isOpen) {
       setIsMinimized(false);
+      if (isFirstOpen) {
+        // Thêm tin nhắn chào mừng khi mở chat lần đầu
+        const welcomeMessage = {
+          text: "Xin chào! Tôi là T-One Assistant. Tôi có thể giúp gì cho bạn?",
+          sender: "bot",
+          timestamp: new Date().toLocaleTimeString(),
+        };
+        setMessages([welcomeMessage]);
+        setIsFirstOpen(false);
+      }
     }
   };
 
@@ -38,44 +49,44 @@ const Chatbot = () => {
     // Add user message
     const userMessage = {
       text: inputMessage,
-      sender: 'user',
-      timestamp: new Date().toLocaleTimeString()
+      sender: "user",
+      timestamp: new Date().toLocaleTimeString(),
     };
-    setMessages(prev => [...prev, userMessage]);
-    setInputMessage('');
+    setMessages((prev) => [...prev, userMessage]);
+    setInputMessage("");
     setIsTyping(true);
 
     try {
       // Call Flask API
-      const response = await axios.post('http://localhost:5000/api/chat', {
-        message: inputMessage
+      const response = await axios.post("http://127.0.0.1:8000/chat", {
+        message: inputMessage,
       });
 
       // Add bot response
       const botMessage = {
         text: response.data.response,
-        sender: 'bot',
-        timestamp: new Date().toLocaleTimeString()
+        sender: "bot",
+        timestamp: new Date().toLocaleTimeString(),
       };
-      setMessages(prev => [...prev, botMessage]);
+      setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
-      console.error('Error sending message:', error);
+      console.error("Error sending message:", error);
       // Add error message
       const errorMessage = {
-        text: 'Xin lỗi, tôi đang gặp sự cố. Vui lòng thử lại sau.',
-        sender: 'bot',
-        timestamp: new Date().toLocaleTimeString()
+        text: "Xin lỗi, tôi đang gặp sự cố. Vui lòng thử lại sau.",
+        sender: "bot",
+        timestamp: new Date().toLocaleTimeString(),
       };
-      setMessages(prev => [...prev, errorMessage]);
+      setMessages((prev) => [...prev, errorMessage]);
     } finally {
       setIsTyping(false);
     }
   };
 
   return (
-    <div className={`chatbot-container ${isOpen ? 'open' : ''}`}>
+    <div className="chatbot-container">
       {/* Chat Toggle Button */}
-      <button 
+      <button
         className="chat-toggle-btn"
         onClick={toggleChat}
         aria-label="Toggle chat"
@@ -91,11 +102,18 @@ const Chatbot = () => {
       </button>
 
       {/* Chat Window */}
-      <div className={`chat-window ${isMinimized ? 'minimized' : ''}`}>
+      <div
+        className={`chat-window ${isOpen ? "open" : ""} ${
+          isMinimized ? "minimized" : ""
+        }`}
+      >
         {/* Chat Header */}
         <div className="chat-header">
           <div className="chat-title">
-            <div className="robot-icon" style={{ width: '24px', height: '24px' }}>
+            <div
+              className="robot-icon"
+              style={{ width: "24px", height: "24px" }}
+            >
               <div className="robot-antenna"></div>
               <div className="robot-head">
                 <div className="robot-eye left"></div>
@@ -120,7 +138,7 @@ const Chatbot = () => {
           {messages.map((message, index) => (
             <div
               key={index}
-              className={`message ${message.sender === 'bot' ? 'bot' : 'user'}`}
+              className={`message ${message.sender === "bot" ? "bot" : "user"}`}
             >
               <div className="message-content">
                 <p>{message.text}</p>
@@ -158,4 +176,4 @@ const Chatbot = () => {
   );
 };
 
-export default Chatbot; 
+export default Chatbot;
