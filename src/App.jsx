@@ -1,19 +1,21 @@
-import { useState } from "react"
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
-import "./styles/global.css"
+import { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import "./styles/global.css";
 
 // Import components
-import Header from "./components/Header"
-import Footer from "./components/Footer"
-import Home from "./pages/Home"
-import Assessment from "./pages/Assessment"
-import Resources from "./pages/Resources"
-import Recommendations from "./pages/Recommendations"
-import Emergency from "./pages/Emergency"
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import Home from "./pages/Home";
+import Assessment from "./pages/Assessment";
+import Resources from "./pages/Resources";
+import Recommendations from "./pages/Recommendations";
+import Emergency from "./pages/Emergency";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 function App() {
   // App-level state that could be passed as props
-  const [assessmentResults, setAssessmentResults] = useState(null)
+  const [assessmentResults, setAssessmentResults] = useState(null);
 
   return (
     <Router>
@@ -23,10 +25,13 @@ function App() {
             path="/"
             element={
               <>
-                <Header activePage="home" />
-                <Home />
-                <Footer />
+                <div className="app-container">
+                  <Header activePage="home" />
+                  <Home />
+                  <Footer />
+                </div>
               </>
+    
             }
           />
           <Route
@@ -34,7 +39,10 @@ function App() {
             element={
               <>
                 <Header activePage="assessment" />
-                <Assessment onCompleteAssessment={setAssessmentResults} previousResults={assessmentResults} />
+                <Assessment
+                  onCompleteAssessment={setAssessmentResults}
+                  previousResults={assessmentResults}
+                />
                 <Footer />
               </>
             }
@@ -50,30 +58,20 @@ function App() {
             }
           />
           <Route
-            path="/recommendations"
-            element={
-              <>
-                <Header activePage="recommendations" />
-                <Recommendations assessmentResults={assessmentResults} />
-                <Footer />
-              </>
-            }
-          />
-          <Route
             path="/emergency"
             element={
               <>
                 <Header activePage="emergency" />
                 <Emergency />
-                <Footer />
               </>
             }
           />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
         </Routes>
       </div>
     </Router>
-  )
+  );
 }
 
-export default App
-
+export default App;

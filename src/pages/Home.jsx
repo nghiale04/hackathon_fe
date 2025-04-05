@@ -1,115 +1,113 @@
 import { Link } from "react-router-dom";
-import { MessageCircle, BookOpen, LifeBuoy, BarChart3 } from "lucide-react";
+import {
+  MessageCircle,
+  BookOpen,
+  LifeBuoy,
+  BarChart3,
+} from "lucide-react";
 import FeatureCard from "../components/FeartureCard";
+import Header from "../components/Header";
 import "../styles/home.css";
 
 function Home() {
   return (
-    <main className="main">
-      <section className="hero">
-        <h2 className="hero-title">Your Supportive AI Companion</h2>
-        <p className="hero-description">
-          A safe space to talk, find resources, and get support for stress,
-          depression, and cyberbullying.
-        </p>
-        <div className="hero-buttons">
-          <Link to="/assessment" className="primary-button">
-            Take Assessment
-          </Link>
-          <Link to="/resources" className="secondary-button">
-            Explore Resources
-          </Link>
-        </div>
-      </section>
+    <>
+      <Header />
+      <main className="main">
+        <section className="hero">
+          <h2 className="hero-title">Người bạn đồng hành tâm lý của bạn</h2>
+          <p className="hero-description">
+            Một không gian an toàn để chia sẻ, tìm kiếm nguồn lực và nhận hỗ trợ
+            cho các vấn đề về căng thẳng, trầm cảm và bắt nạt trên mạng.
+          </p>
+          <div className="hero-buttons">
+            <Link to="/assessment" className="primary-button">
+              Bắt đầu đánh giá
+            </Link>
+            <Link to="/resources" className="secondary-button">
+              Khám phá tài nguyên
+            </Link>
+          </div>
+        </section>
 
-      <section className="features">
-        <FeatureCard
-          icon={<MessageCircle className="feature-icon" />}
-          title="Mental Health Assessment"
-          description="Take our psychological assessment to better understand your mental wellbeing and get personalized recommendations."
-        />
-        <FeatureCard
-          icon={<BookOpen className="feature-icon" />}
-          title="Helpful Resources"
-          description="Access articles, videos, and exercises designed to help with stress, depression, and cyberbullying."
-        />
-        <FeatureCard
-          icon={<LifeBuoy className="feature-icon" />}
-          title="Emergency Support"
-          description="Quick access to crisis hotlines and professional help when you need immediate assistance."
-        />
-        <FeatureCard
-          icon={<BarChart3 className="feature-icon" />}
-          title="Personalized Recommendations"
-          description="Receive tailored suggestions for images, videos, and locations to support your mental wellbeing."
-        />
-      </section>
+        <section className="features">
+          <FeatureCard
+            icon={<MessageCircle className="feature-icon" />}
+            title="Đánh giá sức khỏe tâm thần"
+            description="Thực hiện đánh giá tâm lý để hiểu rõ hơn về sức khỏe tâm thần của bạn và nhận các đề xuất cá nhân hóa."
+          />
+          <FeatureCard
+            icon={<BookOpen className="feature-icon" />}
+            title="Tài nguyên hữu ích"
+            description="Truy cập các bài viết, video và bài tập được thiết kế để giúp đỡ với căng thẳng, trầm cảm và bắt nạt trên mạng."
+          />
+          <FeatureCard
+            icon={<LifeBuoy className="feature-icon" />}
+            title="Hỗ trợ khẩn cấp"
+            description="Truy cập nhanh vào các đường dây nóng khủng hoảng và sự giúp đỡ chuyên nghiệp khi bạn cần hỗ trợ ngay lập tức."
+          />
+          <FeatureCard
+            icon={<BarChart3 className="feature-icon" />}
+            title="Đề xuất cá nhân hóa"
+            description="Nhận các gợi ý được điều chỉnh cho hình ảnh, video và địa điểm để hỗ trợ sức khỏe tâm thần của bạn."
+          />
+        </section>
 
-      <section className="help-section">
-        <h2 className="section-title">How We Can Help</h2>
-        <div className="help-grid">
-          <div className="help-item">
-            <h3 className="help-title">For Stress & Anxiety</h3>
-            <p className="help-description">
-              Learn techniques to manage stress, practice mindfulness, and
-              develop healthy coping mechanisms.
-            </p>
-            <ul className="help-list">
-              <li>Guided breathing exercises</li>
-              <li>Stress reduction techniques</li>
-              <li>Sleep improvement strategies</li>
-            </ul>
+        <section className="help-section">
+          <h2 className="section-title">Chúng tôi có thể giúp gì cho bạn</h2>
+          <div className="help-grid">
+            <div className="help-item">
+              <h3 className="help-title">Căng thẳng & Lo âu</h3>
+              <p className="help-description">
+                Học các kỹ thuật quản lý căng thẳng, thực hành chánh niệm và
+                phát triển cơ chế đối phó lành mạnh.
+              </p>
+              <ul className="help-list">
+                <li>Bài tập thở có hướng dẫn</li>
+                <li>Kỹ thuật giảm căng thẳng</li>
+                <li>Chiến lược cải thiện giấc ngủ</li>
+              </ul>
+            </div>
+            <div className="help-item">
+              <h3 className="help-title">Trầm cảm</h3>
+              <p className="help-description">
+                Tìm kiếm sự hỗ trợ, nguồn lực và công cụ để giúp vượt qua trầm
+                cảm và xây dựng khả năng phục hồi.
+              </p>
+              <ul className="help-list">
+                <li>Theo dõi tâm trạng và viết nhật ký</li>
+                <li>Bài tập tâm lý tích cực</li>
+                <li>Kết nối với sự giúp đỡ chuyên nghiệp</li>
+              </ul>
+            </div>
+            <div className="help-item">
+              <h3 className="help-title">Mạng xã hội</h3>
+              <p className="help-description">
+                Nhận hướng dẫn về cách xử lý tình huống bắt nạt trên mạng, bảo
+                vệ bản thân trực tuyến và tìm kiếm sự hỗ trợ.
+              </p>
+              <ul className="help-list">
+                <li>Chiến lược ghi chép</li>
+                <li>Hướng dẫn chặn và báo cáo</li>
+                <li>Xây dựng khả năng phục hồi kỹ thuật số</li>
+              </ul>
+            </div>
+            <div className="help-item">
+              <h3 className="help-title">Dành cho mọi người</h3>
+              <p className="help-description">
+                Truy cập các nguồn lực sức khỏe tâm thần chung và công cụ hỗ trợ
+                luôn có sẵn khi bạn cần.
+              </p>
+              <ul className="help-list">
+                <li>Đánh giá tâm lý</li>
+                <li>Tài nguyên giáo dục</li>
+                <li>Đề xuất tự chăm sóc</li>
+              </ul>
+            </div>
           </div>
-          <div className="help-item">
-            <h3 className="help-title">For Depression</h3>
-            <p className="help-description">
-              Find support, resources, and tools to help navigate through
-              depression and build resilience.
-            </p>
-            <ul className="help-list">
-              <li>Mood tracking and journaling</li>
-              <li>Positive psychology exercises</li>
-              <li>Connection to professional help</li>
-            </ul>
-          </div>
-          <div className="help-item">
-            <h3 className="help-title">For Cyberbullying</h3>
-            <p className="help-description">
-              Get guidance on handling cyberbullying situations, protecting
-              yourself online, and finding support.
-            </p>
-            <ul className="help-list">
-              <li>Documentation strategies</li>
-              <li>Blocking and reporting guidance</li>
-              <li>Building digital resilience</li>
-            </ul>
-          </div>
-          <div className="help-item">
-            <h3 className="help-title">For Everyone</h3>
-            <p className="help-description">
-              Access general mental wellness resources and supportive tools that
-              are always there when you need them.
-            </p>
-            <ul className="help-list">
-              <li>Psychological assessments</li>
-              <li>Educational resources</li>
-              <li>Self-care recommendations</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <section className="cta-section">
-        <h2 className="section-title">Ready to Start Your Journey?</h2>
-        <p className="cta-description">
-          Take the first step toward better mental well-being with our
-          supportive tools and resources.
-        </p>
-        <Link to="/assessment" className="primary-button">
-          Take Assessment Now
-        </Link>
-      </section>
-    </main>
+        </section>
+      </main>
+    </>
   );
 }
 
