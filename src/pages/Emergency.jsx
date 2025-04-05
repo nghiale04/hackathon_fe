@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { Phone, MessageSquare, Globe, AlertTriangle } from "react-icons/lu"
+import { Phone, MessageSquare, Globe, AlertTriangle } from "lucide-react"
 import EmergencyCard from "../components/EmergencyCard"
 import "../styles/emergency.css"
 
