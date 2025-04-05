@@ -1,0 +1,419 @@
+/* Emergency Page Styles */
+:root {
+    --primary-color: #00af91;
+    --primary-dark: #008c74;
+    --primary-light: #ccefe9;
+    --secondary-color: #f8f9fa;
+    --text-color: #333333;
+    --text-light: #666666;
+    --white: #ffffff;
+    --gray-light: #f0f0f0;
+    --gray: #dddddd;
+    --red: #e53e3e;
+    --red-light: #fed7d7;
+    --blue: #3182ce;
+    --blue-light: #bee3f8;
+    --border-radius: 8px;
+    --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+  }
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
+      "Helvetica Neue", sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background: linear-gradient(to bottom, #e6f7f5, #ccefe9);
+    min-height: 100vh;
+  }
+  
+  .emergency-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  /* Header */
+  .emergency-header {
+    background-color: var(--white);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  
+  .logo {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  
+  .nav {
+    display: none;
+  }
+  
+  .nav-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    margin: 0 1rem;
+    font-weight: 500;
+    transition: var(--transition);
+  }
+  
+  .nav-link:hover {
+    color: var(--primary-dark);
+  }
+  
+  /* Main Content */
+  .emergency-main {
+    flex: 1;
+    padding: 2rem;
+  }
+  
+  .emergency-content {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  
+  /* Alert Banner */
+  .alert-banner {
+    background-color: var(--red-light);
+    border-left: 4px solid var(--red);
+    padding: 1rem;
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: flex-start;
+  }
+  
+  .alert-icon {
+    color: var(--red);
+    width: 24px;
+    height: 24px;
+    margin-right: 1rem;
+    flex-shrink: 0;
+  }
+  
+  .alert-title {
+    color: #c53030;
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  .alert-message {
+    color: #c53030;
+  }
+  
+  /* Page Title and Description */
+  .page-title {
+    font-size: 2rem;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+  }
+  
+  .page-description {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    margin-bottom: 2rem;
+    max-width: 800px;
+  }
+  
+  /* Emergency Grid */
+  .emergency-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  
+  /* Emergency Card */
+  .emergency-card {
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--box-shadow);
+  }
+  
+  .red-card {
+    background-color: var(--red-light);
+    border: 1px solid #feb2b2;
+  }
+  
+  .blue-card {
+    background-color: var(--blue-light);
+    border: 1px solid #90cdf4;
+  }
+  
+  .teal-card {
+    background-color: var(--primary-light);
+    border: 1px solid #99dfd3;
+  }
+  
+  .card-header {
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  
+  .icon-container {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--white);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .emergency-icon {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .phone-icon {
+    color: var(--red);
+  }
+  
+  .chat-icon {
+    color: var(--blue);
+  }
+  
+  .globe-icon {
+    color: var(--primary-color);
+  }
+  
+  .card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+  
+  .card-content {
+    padding: 1.5rem;
+  }
+  
+  /* Hotlines */
+  .hotlines {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .hotline {
+    margin-bottom: 1rem;
+  }
+  
+  .hotline-name {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+  
+  .hotline-number {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+  }
+  
+  .hotline-description {
+    font-size: 0.875rem;
+    color: var(--text-light);
+  }
+  
+  /* Chat Services */
+  .chat-services {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .chat-service {
+    margin-bottom: 1rem;
+  }
+  
+  .service-name {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+  
+  .service-description {
+    font-size: 0.875rem;
+    color: var(--text-light);
+    margin-bottom: 0.5rem;
+  }
+  
+  .service-button {
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    cursor: pointer;
+    background-color: transparent;
+    transition: var(--transition);
+  }
+  
+  .service-button.blue {
+    border: 1px solid var(--blue);
+    color: var(--blue);
+  }
+  
+  .service-button.blue:hover {
+    background-color: rgba(49, 130, 206, 0.1);
+  }
+  
+  .service-button.teal {
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+  }
+  
+  .service-button.teal:hover {
+    background-color: rgba(0, 175, 145, 0.1);
+  }
+  
+  /* What to Expect Section */
+  .what-to-expect {
+    background-color: var(--white);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    margin-bottom: 3rem;
+    box-shadow: var(--box-shadow);
+  }
+  
+  .section-title {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+  }
+  
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .step-title {
+    font-size: 1.1rem;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+  }
+  
+  .step-description {
+    color: var(--text-light);
+  }
+  
+  /* International Resources */
+  .international-resources {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .resource {
+    margin-bottom: 1rem;
+  }
+  
+  .resource-name {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+  
+  .resource-description {
+    font-size: 0.875rem;
+    color: var(--text-light);
+    margin-bottom: 0.5rem;
+  }
+  
+  /* When to Seek Help */
+  .when-to-seek-help {
+    background-color: var(--white);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    box-shadow: var(--box-shadow);
+  }
+  
+  .warning-list {
+    list-style: none;
+  }
+  
+  .warning-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+  }
+  
+  .warning-icon {
+    color: var(--red);
+    width: 16px;
+    height: 16px;
+    margin-right: 0.75rem;
+    margin-top: 0.25rem;
+    flex-shrink: 0;
+    background-color: var(--red-light);
+    padding: 2px;
+    border-radius: 50%;
+  }
+  
+  /* Chat CTA */
+  .chat-cta {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .cta-description {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    margin-bottom: 1.5rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .primary-button {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: var(--white);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: var(--transition);
+  }
+  
+  .primary-button:hover {
+    background-color: var(--primary-dark);
+  }
+  
+  /* Footer */
+  .emergency-footer {
+    background-color: var(--primary-dark);
+    color: var(--white);
+    padding: 2rem;
+    text-align: center;
+  }
+  
+  .footer-note {
+    max-width: 800px;
+    margin: 0 auto 1rem;
+  }
+  
+  /* Media Queries */
+  @media (min-width: 768px) {
+    .nav {
+      display: flex;
+    }
+  
+    .emergency-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  
