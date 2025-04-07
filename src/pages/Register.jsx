@@ -75,7 +75,7 @@ function Register() {
     }
 
     try {
-      const response = await axios.post("http://localhost:8080/api/register", {
+      const response = await axios.post("https://be.nguyenhoangan.site/api/register", {
         fullname: formData.fullname,
         username: formData.email,
         password: formData.password,

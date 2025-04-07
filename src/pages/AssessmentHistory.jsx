@@ -13,7 +13,7 @@ function AssessmentHistory() {
       try {
         const user = localStorage.getItem('user');
         const username = JSON.parse(user).email;
-        const response = await axios.get('http://localhost:8080/api/assessment-history', {
+        const response = await axios.get('https://be.nguyenhoangan.site/api/assessment-history', {
           params: { username: username }
         });
         setHistory(response.data.results);

@@ -32,7 +32,7 @@ const AssessmentResult = () => {
         if (user) {
           const username = JSON.parse(user).email;
           const response = await axios.post(
-            "http://localhost:8080/api/qna/ask",
+            "https://be.nguyenhoangan.site/api/qna/ask",
             {
               username,
               type,
@@ -45,7 +45,7 @@ const AssessmentResult = () => {
           setLoading(false);
         } else {
           const response = await axios.post(
-            "http://localhost:8080/api/qna/ask",
+            "https://be.nguyenhoangan.site/api/qna/ask",
             {
               type,
               totalScore,
@@ -127,9 +127,6 @@ const AssessmentResult = () => {
         <div className="results-content">
           <p>
             <strong>Chủ đề:</strong> {category?.title}
-          </p>
-          <p>
-            <strong>Tổng điểm:</strong> {totalScore}
           </p>
           <p>
             <strong>Loại đánh giá:</strong> {type}

@@ -127,7 +127,7 @@ function Assessment() {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await axios.get(`http://localhost:8080/api/questions`, {
+      const response = await axios.get(`https://be.nguyenhoangan.site/api/questions`, {
         params: {
           type: categoryId,
         },
